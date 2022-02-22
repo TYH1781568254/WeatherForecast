@@ -1,5 +1,6 @@
 package com.weatherforecast.android.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weatherforecast.android.R
+import com.weatherforecast.android.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.fragment_place.*
 import kotlinx.android.synthetic.*
 import java.util.*
@@ -32,6 +34,19 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        if (viewModel.isPlaceSaved()){
+            val place = viewModel.getSavePlace()
+            val intent = Intent(context,WeatherActivity::class.java).apply {
+                putExtra("location_lng",place.location.lng)
+                putExtra("location_lat",place.location.lat)
+                putExtra("place_name",place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
+
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         adapter = PlaceAdapter(this,viewModel.placeList)
@@ -61,9 +76,27 @@ class PlaceFragment : Fragment() {
 //        }
        searchPlaceEdit.addTextChangedListener( object :TextWatcher{
            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//               val content=s.toString()
+//               if (content.isNotEmpty()){
+//                   viewModel.searchPlaces(content)
+//               }else{
+//                   recyclerView.visibility = View.GONE
+//                   recyclerView.visibility = View.VISIBLE
+//                   viewModel.placeList.clear()
+//                   adapter.notifyDataSetChanged()
+//               }
            }
 
            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//               val content=s.toString()
+//               if (content.isNotEmpty()){
+//                   viewModel.searchPlaces(content)
+//               }else{
+//                   recyclerView.visibility = View.GONE
+//                   recyclerView.visibility = View.VISIBLE
+//                   viewModel.placeList.clear()
+//                   adapter.notifyDataSetChanged()
+//               }
 
            }
 
