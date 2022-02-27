@@ -9,6 +9,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+//统一的网络数据源访问入口，对所有网络请求的API进行封装
 object WeatherForecastNetwork {
 
     private val weatherService = ServiceCreator.create(WeatherService::class.java)

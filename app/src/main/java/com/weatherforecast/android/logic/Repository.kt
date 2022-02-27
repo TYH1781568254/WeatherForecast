@@ -17,6 +17,8 @@ object Repository {
     fun searchPlaces(query:String) = fire(Dispatchers.IO) {
 //        val result =try {
             val placeResponse = WeatherForecastNetwork.searchPlaces(query)
+        //判断响应状态，为ok则对获取的城市数据列表进行包装
+        //否则包装一个异常信息
             if (placeResponse.status == "ok"){
                 val places = placeResponse.places
                 Result.success(places)
@@ -26,7 +28,7 @@ object Repository {
 //        }catch (e:Exception){
 //            Result.failure<List<Place>>(e)
 //        }
-//        emit(result)
+//        emit(result)//将我们包装的信息发射出去
     }
 
     fun refreshWeather(lng:String,lat:String)= fire(Dispatchers.IO) {
@@ -40,6 +42,8 @@ object Repository {
                 }
                 val realtimeResponse = deferredRealtime.await()
                 val dailyResponse = deferredDaily.await()
+                //实时天气信息API与未来天气信息API的服务器都返回ok才进行信息包装
+                //否则包装一个异常信息
                 if (realtimeResponse.status == "ok" && dailyResponse.status == "ok"){
                     val weather = Weather(realtimeResponse.result.realtime,
                                             dailyResponse.result.daily)
@@ -66,7 +70,7 @@ object Repository {
                 }catch (e:Exception){
                     Result.failure<T>(e)
                 }
-                emit(result)
+                emit(result)//将我们包装的信息发射出去
             }
 
     fun savePlace(place: Place) = PlaceDao.savePlace(place)

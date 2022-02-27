@@ -35,7 +35,6 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         if (activity is MainActivity && viewModel.isPlaceSaved()){
             val place = viewModel.getSavePlace()
             val intent = Intent(context,WeatherActivity::class.java).apply {

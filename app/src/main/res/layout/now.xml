@@ -11,13 +11,15 @@
         android:layout_height="70dp"
         android:fitsSystemWindows="true">
 
-        <Button
+
+        //一个按钮控件，我们可以通过它添加点击事件
+        <ImageButton
             android:id="@+id/navBtn"
-            android:layout_width="20dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="15dp"
             android:layout_gravity="center_vertical"
-            android:drawableBottom="@drawable/ic_home"
+            android:background="@drawable/ic_home"
              />
 
         <TextView
