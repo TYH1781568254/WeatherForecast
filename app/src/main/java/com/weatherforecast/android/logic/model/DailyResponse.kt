@@ -3,6 +3,8 @@ package com.weatherforecast.android.logic.model
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
+//在数据模型中用List集合来对JSON中的数组元素进行映射。
+//这是未来几天天气信息的数据模型
 data class DailyResponse(val status:String,val result: Result) {
 
     data class Result(val daily: Daily)

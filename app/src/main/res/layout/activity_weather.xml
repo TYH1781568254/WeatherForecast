@@ -5,7 +5,10 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    //最外层嵌套一个DrawerLayout，在DrawerLayout中第一个子控件用于显示主屏幕内容
+    //第二个子控件用于显示滑动菜单内容，这里添加用于搜索全球城市数据的Fragment
 
+    //ScrollView外层嵌套一个SwipeRefreshLayout，使得ScrollView拥有下拉刷新功能
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeRefresh"

@@ -12,6 +12,8 @@ import com.weatherforecast.android.logic.model.Place
 import com.weatherforecast.android.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.activity_weather.*
 
+//为RecyclerView准备配适器，使用RecyclerView配适器标准写法，让配适器继承自RecyclerView.Adapter
+//并将泛型指定为PlaceAdapter.ViewHolder
 class PlaceAdapter(private val fragment: PlaceFragment,private val placeList: List<Place>) :
     RecyclerView.Adapter<PlaceAdapter.ViewHolder>(){
 
@@ -24,10 +26,13 @@ class PlaceAdapter(private val fragment: PlaceFragment,private val placeList: Li
         val view = LayoutInflater.from(parent.context).inflate(R.layout.place_item,
             parent,false)
         val holder = ViewHolder(view)
+        //给place_item.xml的最外层布局注册一个点击事件监听器
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             val place = placeList[position]
 
+            //判断PlaceFragment所处的Activity，如果在WeatherActivity
+            // 就关闭滑动菜单，给WeatherViewModel传入新的经纬度和地区名，然后刷新天气信息
             val activity = fragment.activity
             if (activity is WeatherActivity){
                 activity.drawerLayout.closeDrawers()
@@ -36,7 +41,8 @@ class PlaceAdapter(private val fragment: PlaceFragment,private val placeList: Li
                 activity.viewModel.placeName = place.name
                 activity.refreshWeather()
             }else {
-
+                // 获取当前点击项的经纬度及地区名称传入Intent
+                // 然后利用startActivity启动WeatherActivity
                 val intent = Intent(parent.context, WeatherActivity::class.java).apply {
                     putExtra("location_lng", place.location.lng)
                     putExtra("location_lat", place.location.lat)
@@ -46,7 +52,7 @@ class PlaceAdapter(private val fragment: PlaceFragment,private val placeList: Li
                 fragment.startActivity(intent)
                 activity?.finish()
             }
-            fragment.viewModel.savePlace(place)
+            fragment.viewModel.savePlace(place)//储存选中的城市
         }
         return holder
     }

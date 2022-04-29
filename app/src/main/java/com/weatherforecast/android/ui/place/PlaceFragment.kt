@@ -20,11 +20,14 @@ import kotlinx.android.synthetic.main.fragment_place.*
 import kotlinx.android.synthetic.*
 import java.util.*
 
+//搜索城市数据模块的Fragment代码编写，完成之后要将该Fragment添加到activity_main.xml中
 class PlaceFragment : Fragment() {
+    //获取PlaceViewModel的实例
     val viewModel by lazy { ViewModelProvider(this).get(PlaceViewModel::class.java) }
 
     private lateinit var adapter: PlaceAdapter
 
+    //加入编写的fragment_place布局
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,6 +38,8 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //如果当前已有储存的城市数据，就获取数据并解析为place对象，然后使用它的经纬度和地名
+        // 直接跳转传递给WeatherActivity
         if (activity is MainActivity && viewModel.isPlaceSaved()){
             val place = viewModel.getSavePlace()
             val intent = Intent(context,WeatherActivity::class.java).apply {
@@ -47,6 +52,7 @@ class PlaceFragment : Fragment() {
             return
         }
 
+        //给RecyclerView设置LayoutManager和配适器，并使用PlaceViewModel中placeList集合作为数据源
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         adapter = PlaceAdapter(this,viewModel.placeList)
@@ -74,6 +80,8 @@ class PlaceFragment : Fragment() {
 //                adapter.notifyDataSetChanged()
 //            }
 //        }
+
+        //addTextChangedListener（）该方法用于监听搜索框内容变化情况
        searchPlaceEdit.addTextChangedListener( object :TextWatcher{
            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 //               val content=s.toString()
@@ -100,11 +108,14 @@ class PlaceFragment : Fragment() {
 
            }
 
+           //该重写方法表示在文字发送改变后进行操作
            override fun afterTextChanged(s: Editable?) {
                val content=s.toString()
                if (content.isNotEmpty()){
+                   //输入框内容不为空，发起搜索城市数据网络请求
                    viewModel.searchPlaces(content)
                }else{
+                   //内容为空，隐藏RecyclerView，显示背景图
                    recyclerView.visibility = View.GONE
                    recyclerView.visibility = View.VISIBLE
                    viewModel.placeList.clear()
@@ -114,9 +125,12 @@ class PlaceFragment : Fragment() {
 
        })
 
-
+        //对PlaceViewModel中的placeLiveData对象进行观察当出现任何数据变化时，
+        // 就会回调到传入的Observer接口实现中
         viewModel.placeLiveData.observe(viewLifecycleOwner, Observer { result ->
             val places = result.getOrNull()
+            //数据不为空时，将数据添加到PlaceViewModel的placeList集合中，
+            // 数据为空弹出异常提示
             if (places != null){
                 recyclerView.visibility = View.VISIBLE
                 bgImageView.visibility = View.GONE

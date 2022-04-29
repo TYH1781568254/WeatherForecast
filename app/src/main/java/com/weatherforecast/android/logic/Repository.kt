@@ -12,6 +12,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlin.RuntimeException
 import kotlin.coroutines.CoroutineContext
 
+//仓库层统一封装入口
 object Repository {
 
     fun searchPlaces(query:String) = fire(Dispatchers.IO) {
@@ -73,6 +74,7 @@ object Repository {
                 emit(result)//将我们包装的信息发射出去
             }
 
+    //对PlaceDao中的方法进行封装
     fun savePlace(place: Place) = PlaceDao.savePlace(place)
 
     fun getSavedPlace() = PlaceDao.getSavedPlace()

@@ -2,9 +2,12 @@ package com.weatherforecast.android.logic.model
 
 import com.weatherforecast.android.R
 
+//编写一个转换函数，将彩云天气返回的数据转换为Sky对象
+//info、icon、bg三个字段分别代表文字、图标、背景
 class Sky (val info:String,val icon:Int,val bg:Int)
 
 private val sky = mapOf(
+    //将天气情况与提前准备好的图片对应
     "CLEAR_DAY" to Sky("晴", R.drawable.ic_clear_day,R.drawable.bg_clear_day),
     "CLEAR_NIGHT" to Sky("晴",R.drawable.ic_clear_night,R.drawable.bg_clear_night),
     "PARTLY_CLOUDY_DAY" to Sky("多云",R.drawable.ic_partly_cloud_day,R.drawable.bg_partly_cloudy_day),
